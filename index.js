@@ -1,10 +1,12 @@
 // Example express application adding the parse-server module to expose Parse
 // compatible API routes.
 
-var express = require('express');
+var express     = require('express');
 var ParseServer = require('parse-server').ParseServer;
-var S3Adapter = require('parse-server').S3Adapter;
-var cors = require('cors');
+var S3Adapter   = require('parse-server').S3Adapter;
+var cors        = require('cors');
+var kue         = require('kue');
+var ui          = require('kue-ui');
 
 var databaseUri = process.env.DATABASE_URI || process.env.MONGODB_URL
 
@@ -58,8 +60,12 @@ app.use(cors(corsOptions));
 
 // Serve the Parse API on the /parse URL prefix
 var mountPath = process.env.PARSE_MOUNT || '/parse';
-app.use(mountPath, api)
+app.use(mountPath, api);
 
+app.use('/jobs', kue.app);
+app.use('/kue', ui.app);
+
+app.listen(3000);
 
 // Parse Server plays nicely with the rest of your web routes
 app.get('/', function(req, res) {
