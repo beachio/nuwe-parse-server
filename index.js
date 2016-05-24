@@ -44,6 +44,9 @@ var api = new ParseServer({
 // If you wish you require them, you can set them as options in the initialization above:
 // javascriptKey, restAPIKey, dotNetKey, clientKey
 
+// connect to REDIS
+var client = redis.createClient(process.env.REDIS_URL);
+
 var app = express();
 
 // Handles CORS requests and allows preflight requests.
