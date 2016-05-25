@@ -44,8 +44,6 @@ var api = new ParseServer({
 // If you wish you require them, you can set them as options in the initialization above:
 // javascriptKey, restAPIKey, dotNetKey, clientKey
 
-// connect to REDIS
-var client = redis.createClient(process.env.REDIS_URL);
 
 var app = express();
 
@@ -67,8 +65,8 @@ app.use(cors(corsOptions));
 // Serve the Parse API on the /parse URL prefix
 var mountPath = process.env.PARSE_MOUNT || '/parse';
 app.use(mountPath, api)
-.use(kue.app); // wire up Kue (see /active for queue interface)
 
+var jobs = kue.createQueue({ redis: process.env.REDIS_URL })
 
 // Parse Server plays nicely with the rest of your web routes
 app.get('/', function(req, res) {
