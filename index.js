@@ -4,8 +4,7 @@
 var express = require('express');
 var ParseServer = require('parse-server').ParseServer;
 var S3Adapter = require('parse-server').S3Adapter;
-var cors = require('cors')
-
+var cors = require('cors');
 
 var databaseUri = process.env.DATABASE_URI || process.env.MONGODB_URL
 
@@ -54,15 +53,12 @@ var corsOptions = {
 };
 
 app.use(cors(corsOptions));
-
-
 // app.options('*', cors(corsOptions));
 
 
 // Serve the Parse API on the /parse URL prefix
 var mountPath = process.env.PARSE_MOUNT || '/parse';
-app.use(mountPath, api);
-
+app.use(mountPath, api)
 
 
 // Parse Server plays nicely with the rest of your web routes
