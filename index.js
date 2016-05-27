@@ -5,9 +5,6 @@ var express = require('express');
 var ParseServer = require('parse-server').ParseServer;
 var S3Adapter = require('parse-server').S3Adapter;
 var cors = require('cors');
-var kue = require('kue');
-var redis = require('kue/node_modules/redis');
-
 
 var databaseUri = process.env.DATABASE_URI || process.env.MONGODB_URL
 
@@ -58,8 +55,6 @@ var corsOptions = {
 };
 
 app.use(cors(corsOptions));
-
-
 // app.options('*', cors(corsOptions));
 
 
@@ -67,16 +62,6 @@ app.use(cors(corsOptions));
 var mountPath = process.env.PARSE_MOUNT || '/parse';
 app.use(mountPath, api)
 
-kue.redis.createClient = function() {
-    var redisUrl = url.parse(process.env.REDISTOGO_URL)
-      , client = redis.createClient(redisUrl.port, redisUrl.hostname);
-    if (redisUrl.auth) {
-        client.auth(redisUrl.auth.split(":")[1]);
-    }
-    return client;
-};
-
-var jobs = kue.createQueue()
 
 // Parse Server plays nicely with the rest of your web routes
 app.get('/', function(req, res) {
