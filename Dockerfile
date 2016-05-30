@@ -6,8 +6,8 @@ ADD . /parse
 WORKDIR /parse
 
 
-RUN mkdir parse/certificate
-RUN mkdir parse/cloud
+RUN mkdir certificate
+RUN mkdir cloud
 ADD $CERTIFICATE_URI /certificate
 ADD $CLOUD_CODE_FILE /cloud/main.js
 

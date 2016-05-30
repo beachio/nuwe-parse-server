@@ -14,7 +14,7 @@ if (!databaseUri) {
 
 var api = new ParseServer({
   databaseURI: databaseUri || process.env.MONGODB_URL || 'mongodb://localhost:27017/dev',
-  cloud: __dirname + '/cloud/main.js',
+  cloud: '/cloud/main.js',
   appId: process.env.APP_ID || '1234',
   masterKey: process.env.MASTER_KEY || '1234',
   javascriptKey: '123456',
