@@ -14,7 +14,7 @@
     "kerberos": "~0.0.x",
     "kue": "^0.10.5",
     "parse": "^1.8.1",
-    "parse-server": "^2.2.9,"
+    "parse-server": "~2.2.2"
   },
   "scripts": {
     "start": "node index.js"
