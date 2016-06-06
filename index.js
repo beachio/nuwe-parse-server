@@ -9,7 +9,7 @@ var kue         = require('kue');
 var ui          = require('kue-ui');
 
 var databaseUri = process.env.DATABASE_URI || process.env.MONGODB_URL
-var redisUri    = process.env.REDIS_URI  || 'redis://localhost:6379'
+var redisUri    = process.env.REDIS_URL  || 'redis://localhost:6379'
 
 if (!databaseUri) {
   console.log('DATABASE_URI not specified, falling back to localhost.');
