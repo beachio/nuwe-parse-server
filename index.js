@@ -20,7 +20,7 @@ var api = new ParseServer({
   cloud: '/cloud/main.js',
   appId: process.env.APP_ID || '1234',
   masterKey: process.env.MASTER_KEY || '1234',
-  javascriptKey: '12345'
+  javascriptKey: '12345',
   serverURL: process.env.SERVER_URL || 'http://localhost:1337',
   push: {
     android: {
