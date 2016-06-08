@@ -1,12 +1,15 @@
 // Example express application adding the parse-server module to expose Parse
 // compatible API routes.
 
-var express = require('express');
+var express     = require('express');
 var ParseServer = require('parse-server').ParseServer;
-var S3Adapter = require('parse-server').S3Adapter;
-var cors = require('cors');
+var S3Adapter   = require('parse-server').S3Adapter;
+var cors        = require('cors');
+var kue         = require('kue');
+var ui          = require('kue-ui');
 
 var databaseUri = process.env.DATABASE_URI || process.env.MONGODB_URL
+var redisUri    = process.env.REDIS_URL  || 'redis://localhost:6379'
 
 if (!databaseUri) {
   console.log('DATABASE_URI not specified, falling back to localhost.');
@@ -17,7 +20,7 @@ var api = new ParseServer({
   cloud: '/cloud/main.js',
   appId: process.env.APP_ID || '1234',
   masterKey: process.env.MASTER_KEY || '1234',
-  javascriptKey: '123456',
+  javascriptKey: '12345'
   serverURL: process.env.SERVER_URL || 'http://localhost:1337',
   push: {
     android: {
@@ -42,8 +45,6 @@ var api = new ParseServer({
 // If you wish you require them, you can set them as options in the initialization above:
 // javascriptKey, restAPIKey, dotNetKey, clientKey
 
-
-
 var app = express();
 
 // Handles CORS requests and allows preflight requests.
@@ -56,17 +57,36 @@ var corsOptions = {
 };
 
 app.use(cors(corsOptions));
-// app.options('*', cors(corsOptions));
+
+
+kue.createQueue({
+  redis: redisUri
+});
+
+ui.setup({
+  apiURL: '/jobs',
+  baseURL: '/kue',
+  updateInterval: 5000
+});
 
 
 // Serve the Parse API on the /parse URL prefix
 var mountPath = process.env.PARSE_MOUNT || '/parse';
-app.use(mountPath, api)
+app.use(mountPath, api);
 
+app.use('/jobs', kue.app);
+app.use('/kue', ui.app);
+
+app.listen(3000);
 
 // Parse Server plays nicely with the rest of your web routes
 app.get('/', function(req, res) {
   res.status(200).send('I dream of being a web site.');
+});
+
+app.get('/job_generator', function(req, res) {
+  require('./job_generator')
+  res.status(200).send("<a href='kue'>You can check created jobs here</a>");
 });
 
 
