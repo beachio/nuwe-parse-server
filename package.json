@@ -10,7 +10,7 @@
   "license": "MIT",
   "dependencies": {
     "cors": "*",
-    "express": "~4.2.x",
+    "express": "^4.13.4",
     "kerberos": "~0.0.x",
     "kue": "^0.10.5",
     "kue-ui": "^0.1.0",
