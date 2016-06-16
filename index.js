@@ -39,6 +39,14 @@ var api = new ParseServer({
     process.env.BUCKET_NAME || "S3_BUCKET",
     {directAccess: true, region: 'eu-west-1'}
   ),
+  emailAdapter: {
+    module: 'parse-server-simple-mailgun-adapter',
+    options: {
+        fromAddress: process.env.MAILGUN_FROM_ADDRESS || 'parse-server@nuwe.co',
+        apiKey: process.env.MAILGUN_API_KEY || 'not_specified',
+        domain: process.env.MAILGUN_DOMAIN || 'not_specified'
+    }
+  }
 });
 // Client-keys like the javascript key or the .NET key are not necessary with parse-server
 // If you wish you require them, you can set them as options in the initialization above:
