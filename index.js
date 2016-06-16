@@ -5,8 +5,17 @@ var express     = require('express');
 var ParseServer = require('parse-server').ParseServer;
 var S3Adapter   = require('parse-server').S3Adapter;
 var cors        = require('cors');
-var kue         = require('kue');
+global.kue      = require('kue');
 var ui          = require('kue-ui');
+global.mailgun  = require('mailgun-js')(
+  {
+    apiKey: process.env.MAILGUN_API_KEY || 'not_specified',
+    domain: process.env.MAILGUN_DOMAIN || 'not_specified',
+  }
+);
+
+
+
 
 var databaseUri = process.env.DATABASE_URI || process.env.MONGODB_URL
 var redisUri    = process.env.REDIS_URL  || 'redis://localhost:6379'
