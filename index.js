@@ -39,6 +39,11 @@ var api = new ParseServer({
     process.env.BUCKET_NAME || "S3_BUCKET",
     {directAccess: true, region: 'eu-west-1'}
   ),
+
+  publicServerURL: process.env.SERVER_URL || 'http://localhost:1337',
+     // Your apps name. This will appear in the subject and body of the emails that are sent.
+  appName: process.env.APP_NAME || 'Nuwe-parse-app',
+  verifyUserEmails: true,
   emailAdapter: {
     module: 'parse-server-simple-mailgun-adapter',
     options: {
