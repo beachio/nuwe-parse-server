@@ -72,7 +72,14 @@ var dashboard = new ParseDashboard({
       "masterKey": process.env.MASTER_KEY || '1234',
       "appName": process.env.APP_NAME || 'Picniq-parse-app'
     }
-  ]
+  ],
+  "users": [
+    {
+      "user":"admin",
+      "pass":"password"
+    }
+  ],
+  "useEncryptedPasswords": true
 }, allowInsecureHTTP);
 
 
