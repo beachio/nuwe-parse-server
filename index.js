@@ -79,7 +79,7 @@ var dashboard = new ParseDashboard({
       "pass":"password"
     }
   ],
-  "useEncryptedPasswords": true
+  "useEncryptedPasswords": false
 }, allowInsecureHTTP);
 
 
