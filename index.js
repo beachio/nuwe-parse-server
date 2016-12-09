@@ -4,6 +4,7 @@
 var express     = require('express');
 var ParseServer = require('parse-server').ParseServer;
 var S3Adapter   = require('parse-server').S3Adapter;
+var ParseDashboard = require('parse-dashboard');
 var cors        = require('cors');
 global.kue      = require('kue');
 var ui          = require('kue-ui');
@@ -14,7 +15,7 @@ global.mailgun  = require('mailgun-js')(
   }
 );
 
-
+var allowInsecureHTTP = true;
 
 
 var databaseUri = process.env.DATABASE_URI || process.env.MONGODB_URL
@@ -51,17 +52,30 @@ var api = new ParseServer({
 
   publicServerURL: process.env.SERVER_URL || 'http://localhost:1337',
      // Your apps name. This will appear in the subject and body of the emails that are sent.
-  appName: process.env.APP_NAME || 'Nuwe-parse-app',
+  appName: process.env.APP_NAME || 'Picniq-parse-app',
   verifyUserEmails: true,
   emailAdapter: {
     module: 'parse-server-simple-mailgun-adapter',
     options: {
-        fromAddress: process.env.MAILGUN_FROM_ADDRESS || 'parse-server@nuwe.co',
+        fromAddress: process.env.MAILGUN_FROM_ADDRESS || 'parse-server@picniq.co',
         apiKey: process.env.MAILGUN_API_KEY || 'not_specified',
         domain: process.env.MAILGUN_DOMAIN || 'not_specified'
     }
   }
 });
+
+var dashboard = new ParseDashboard({
+  "apps": [
+    {
+      "serverURL": process.env.SERVER_URL || 'http://localhost:1337',
+      "appId": process.env.APP_ID || '1234',
+      "masterKey": process.env.MASTER_KEY || '1234',
+      "appName": process.env.APP_NAME || 'Picniq-parse-app'
+    }
+  ]
+}, allowInsecureHTTP);
+
+
 // Client-keys like the javascript key or the .NET key are not necessary with parse-server
 // If you wish you require them, you can set them as options in the initialization above:
 // javascriptKey, restAPIKey, dotNetKey, clientKey
@@ -94,6 +108,10 @@ ui.setup({
 // Serve the Parse API on the /parse URL prefix
 var mountPath = process.env.PARSE_MOUNT || '/parse';
 app.use(mountPath, api);
+
+app.use('/dashboard', dashboard);
+var httpServer = require('http').createServer(app);
+httpServer.listen(4040);
 
 app.use('/jobs', kue.app);
 app.use('/kue', ui.app);
