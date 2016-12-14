@@ -47,7 +47,7 @@ var api = new ParseServer({
     process.env.AWS_ACCESS_KEY_ID || "S3_ACCESS_KEY",
     process.env.AWS_SECRET_ACCESS_KEY || "S3_SECRET_KEY",
     process.env.BUCKET_NAME || "S3_BUCKET",
-    {directAccess: true, region: 'eu-west-1'}
+    {directAccess: true, region: process.env.AWS_REGION || "eu-west-1"}
   ),
 
   publicServerURL: process.env.SERVER_URL || 'http://localhost:1337',
